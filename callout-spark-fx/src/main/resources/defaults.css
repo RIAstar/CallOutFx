@@ -1,0 +1,6 @@
+@namespace rs "library://ns.riastar.net/flex";
+
+rs|CallOut {
+    contentBackgroundColor: #464646;
+    skinClass: ClassReference("net.riastar.skins.spark.CalloutSkin");
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<design>
+    <namespaces>
+			<namespace prefix="rs" uri="library://ns.riastar.net/flex" />
+    </namespaces>
+</design>

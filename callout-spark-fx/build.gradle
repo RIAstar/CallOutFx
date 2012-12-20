@@ -1,0 +1,9 @@
+type = 'swc'
+
+def stylePath = projectDir.path + '/src/main/resources/'
+
+dependencies {
+	external project(':callout-fx')
+}
+
+additionalCompilerOptions.add("-include-stylesheet=defaults.css,${stylePath}defaults.css")

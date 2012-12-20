@@ -1,0 +1,9 @@
+type = 'swf'
+
+mainClass = 'net.riastar.demo.CallOutDemo'
+
+dependencies {
+	merged project(':callout-fx')
+    theme  project(':callout-spark-fx')
+}
+
