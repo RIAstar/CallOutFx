@@ -15,19 +15,61 @@ import spark.events.PopUpEvent;
 import spark.layouts.supportClasses.LayoutBase;
 
 
-[Event(name="close", type="spark.events.DropDownEvent")]
+/**
+ * Dispatched when the CallOut is opened.
+ */
 [Event(name="open", type="spark.events.DropDownEvent")]
+
+/**
+ * Dispatched when the CallOut is closed.
+ */
+[Event(name="close", type="spark.events.DropDownEvent")]
+
 
 [DefaultProperty("calloutContent")]
 
+/**
+ * A Flex/Spark CallOutButton for web or desktop applications
+ *
+ * @author RIAstar
+ */
 public class CallOutButton extends Button implements IDropDownContainer {
 
+    /* ----------------- */
+    /* --- skinparts --- */
+    /* ----------------- */
+
     [SkinPart(required="false")]
+    /**
+     * Creates the dropdown instance.
+     *
+     * @default If this SkinPart is not defined, this defaults to a ClassFactory of CallOuts.
+     */
     public var dropDown:IFactory;
 
 
+    /* ------------------ */
+    /* --- properties --- */
+    /* ------------------ */
+
+    [Inspectable(category="General", enumeration="rollOver,mouseOver,click", defaultValue="rollOver")]
+    /**
+     * The event that will cause the CallOut to open.
+     *
+     * @default MouseEvent.ROLL_OVER
+     */
+    public var triggerEvent:String = MouseEvent.ROLL_OVER;
+
+
+    /* ------------------------------------ */
+    /* --- wrapped 'callout' properties --- */
+    /* ------------------------------------ */
+
     private var _callout:CallOut;
     [Bindable("calloutChanged")]
+    /**
+     * The actual CallOut instance.
+     */
     public function get callout():CallOut {
         return _callout;
     }
@@ -38,6 +80,9 @@ public class CallOutButton extends Button implements IDropDownContainer {
 
     private var _calloutContent:Array;
     [ArrayElementType("mx.core.IVisualElement")]
+    /**
+     * The content to be shown in the CallOut.
+     */
     public function get calloutContent():Array {
         return _calloutContent;
     }
@@ -47,6 +92,9 @@ public class CallOutButton extends Button implements IDropDownContainer {
     }
 
     private var _calloutLayout:LayoutBase;
+    /**
+     * A wrapper for the CallOut's <code>layout</code> property.
+     */
     public function get calloutLayout():LayoutBase {
         return _calloutLayout;
     }
@@ -55,13 +103,23 @@ public class CallOutButton extends Button implements IDropDownContainer {
         if (callout) callout.layout = value;
     }
 
-    [Inspectable(category="General", enumeration="rollOver,mouseOver,click", defaultValue="rollOver")]
-    public var triggerEvent:String = MouseEvent.ROLL_OVER;
 
+    /* --------------------------- */
+    /* --- internal properties --- */
+    /* --------------------------- */
 
     private var dropDownController:DropDownController;
 
 
+    /* -------------------- */
+    /* --- construction --- */
+    /* -------------------- */
+
+    /**
+     * Set up dropDownController event handlers.
+     *
+     * @private
+     */
     override public function initialize():void {
         dropDownController = new DropDownController();
         dropDownController.closeOnResize = false;
@@ -73,6 +131,11 @@ public class CallOutButton extends Button implements IDropDownContainer {
         super.initialize();
     }
 
+    /**
+     * Set up the CallOut instance.
+     *
+     * @private
+     */
     override protected function partAdded(partName:String, instance:Object):void {
         super.partAdded(partName, instance);
 
@@ -92,12 +155,27 @@ public class CallOutButton extends Button implements IDropDownContainer {
         }
     }
 
+    /**
+     * Create a default <code>dropDown</code> factory if none exist in the Skin.
+     *
+     * @private
+     */
     override protected function attachSkin():void {
         super.attachSkin();
         if (!dropDown && !("dropDown" in skin)) dropDown = new ClassFactory(CallOut);
     }
 
 
+    /* ---------------------- */
+    /* --- event handlers --- */
+    /* ---------------------- */
+
+    /**
+     * When the dropdown is first activated, the CallOut instance is created on the fly.
+     * Opens the CallOut.
+     *
+     * @param event
+     */
     private function handleDropDownOpen(event:DropDownEvent):void {
         if (!callout) setCallout(createDynamicPartInstance("dropDown") as CallOut);
         if (!callout) return;
@@ -106,6 +184,11 @@ public class CallOutButton extends Button implements IDropDownContainer {
         callout.open(this, false);
     }
 
+    /**
+     * Closes the CallOut per dropdownController request.
+     *
+     * @param event
+     */
     private function handleDropDownClose(event:DropDownEvent):void {
         if (!callout) return;
 
@@ -113,10 +196,20 @@ public class CallOutButton extends Button implements IDropDownContainer {
         callout.close();
     }
 
+    /**
+     * Notify possible listeners that the CallOut was opened.
+     *
+     * @param event
+     */
     private function handleCalloutOpen(event:PopUpEvent):void {
         dispatchEvent(new DropDownEvent(DropDownEvent.OPEN));
     }
 
+    /**
+     * Make sure it's really closed and notify possible listeners that the CallOut was closed.
+     *
+     * @param event
+     */
     private function handleCalloutClose(event:PopUpEvent):void {
         if (dropDownController.isOpen) closeDropDown();
 
@@ -126,6 +219,11 @@ public class CallOutButton extends Button implements IDropDownContainer {
         dispatchEvent(new DropDownEvent(DropDownEvent.CLOSE));
     }
 
+    /**
+     * If the Button is being removed from the stage while the CallOut is open, close it.
+     *
+     * @param event
+     */
     private function handleButtonRemoved(event:Event):void {
         if (!isDropDownOpen) return;
 
@@ -133,6 +231,10 @@ public class CallOutButton extends Button implements IDropDownContainer {
         closeDropDown();
     }
 
+
+    /* ----------------- */
+    /* --- behaviour --- */
+    /* ----------------- */
 
     public function get isDropDownOpen():Boolean {
         return dropDownController ? dropDownController.isOpen : false;

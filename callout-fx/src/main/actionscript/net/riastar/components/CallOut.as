@@ -13,12 +13,33 @@ import spark.components.SkinnablePopUpContainer;
 
 use namespace mx_internal;
 
-
+/**
+ * A Flex/Spark CallOut for web or desktop applications
+ *
+ * @author RIAstar
+ */
 public class CallOut extends SkinnablePopUpContainer {
 
+    /* ----------------- */
+    /* --- skinparts --- */
+    /* ----------------- */
+
     [SkinPart(required="false")]
+    /**
+     * An optional visual element that links the CallOut visually to its owner.
+     */
     public var arrow:IVisualElement;
 
+
+    /* ----------------- */
+    /* --- behaviour --- */
+    /* ----------------- */
+
+    /**
+     * Implements SkinnablePopUpContainer's "abstract" method.
+     *
+     * @private
+     */
     override public function updatePopUpPosition():void {
         if (!owner || !systemManager) return;
 
@@ -29,6 +50,12 @@ public class CallOut extends SkinnablePopUpContainer {
         PopUpUtil.applyPopUpTransform(owner, color, systemManager, this, position);
     }
 
+    /**
+     * Calculates the CallOut's global position.
+     * By default the CallOut is positioned below and horizontally centered to its owner.
+     *
+     * @return The CallOut's position.
+     */
     protected function calculatePopUpPosition():Point {
         //start from owner's global position
         var pos:Point = owner.parent.localToGlobal(new Point(owner.x, owner.y));
