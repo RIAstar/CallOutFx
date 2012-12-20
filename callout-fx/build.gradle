@@ -1,0 +1,8 @@
+type = 'swc'
+
+def namespace = 'library://ns.riastar.net/flex'
+
+additionalCompilerOptions.addAll([
+        "-namespace=${namespace},${projectDir.path}/src/main/resources/manifest.xml",
+        "-include-namespaces=${namespace}"
+])

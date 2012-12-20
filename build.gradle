@@ -1,0 +1,38 @@
+import org.apache.ivy.plugins.resolver.URLResolver
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    }
+    dependencies.classpath 'org.gradlefx:gradlefx:0.6'
+}
+
+allprojects {
+	apply plugin: 'idea'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.1'
+}
+
+subprojects { 
+	apply plugin: 'gradlefx'
+	apply plugin: 'scaffold'
+
+	repositories {
+		add(new URLResolver()) {
+			name = 'Apache'
+			addArtifactPattern 'http://apache.cu.be/incubator/flex/4.8.0-incubating/binaries/[module]-[revision]-incubating-bin.[ext]'
+		}
+	}
+
+	dependencies {
+		flexSDK 'org.apache:apache-flex-sdk:4.8.0@zip'
+	}
+
+	sdkAutoInstall {
+		showPrompts	= false
+	}
+
+}

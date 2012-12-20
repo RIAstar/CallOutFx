@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<componentPackage>
+
+    <component id="CallOut" class="net.riastar.components.CallOut"/>
+    <component id="CallOutButton" class="net.riastar.components.CallOutButton"/>
+
+</componentPackage>

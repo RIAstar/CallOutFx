@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+               xmlns:s="library://ns.adobe.com/flex/spark"
+               xmlns:rs="library://ns.riastar.net/flex">
+
+    <fx:Style source="defaults.css"/>
+
+    <fx:Declarations>
+        <s:ArrayList id="listItems">
+            <fx:String>I'm an item</fx:String>
+            <fx:String>Me too</fx:String>
+            <fx:String>I wanna be in the List</fx:String>
+            <fx:String>Pick me! Pick me!</fx:String>
+            <fx:String>Meh</fx:String>
+            <fx:String>Ah, finally</fx:String>
+        </s:ArrayList>
+    </fx:Declarations>
+
+    <s:layout>
+        <s:HorizontalLayout gap="25" horizontalAlign="center"/>
+    </s:layout>
+
+    <rs:CallOutButton id="calloutButton" label="{list.selectedItem || 'Select an item'}">
+        <s:List id="list" dataProvider="{listItems}" left="0" right="0"
+                borderVisible="false" color="0xffffff" rollOverColor="0x242424" selectionColor="0x020202"
+                change="calloutButton.closeDropDown()"/>
+    </rs:CallOutButton>
+
+    <rs:CallOutButton id="helpButton" icon="@Embed('/../gfx/icon-16/help.png')">
+        <rs:calloutLayout>
+            <s:VerticalLayout gap="10"/>
+        </rs:calloutLayout>
+
+        <s:Button id="manualButton" label="Manual" width="100%" click="helpButton.closeDropDown()"/>
+        <s:Button id="releaseNotesButton" label="Release notes" width="100%" click="helpButton.closeDropDown()"/>
+    </rs:CallOutButton>
+
+</s:Application>
